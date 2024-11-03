@@ -1,6 +1,5 @@
 let humanScore = 0;
 let computerScore = 0;
-const runTimes = 5
 
 function getComputerChoice() {
     let max = 3;
@@ -15,10 +14,7 @@ function getComputerChoice() {
     }
 }
 
-function getHumanChoice() {
-    console.log("We are playing Rock Paper Scissors")
-    let value = prompt("Please enter either ROCK, PAPER or SCISSORS: ");
-    let result = value.toUpperCase()
+function getHumanChoice(result) {
     if ((result === "ROCK") || (result === "PAPER") || (result === "SCISSORS")) {
         return result
     } else {
@@ -46,13 +42,59 @@ function playRound(human, computer) {
     }
 }
 
-console.log("Hello!");
-for (let i = 0; i < runTimes; i++) {
-    const humanChoice = getHumanChoice();
-    console.log("You Choose " + humanChoice);
-    const computerChoice = getComputerChoice();
-    console.log("Computer Chooses " + computerChoice);
+function determineResults(target) {
+    humanChoice = target.textContent;
+    const humanResult  = document.createElement('div');
+    humanResult.textContent = "You Choose " + humanChoice;
+    resultDiv.appendChild(humanResult);
+
+    computerChoice = getComputerChoice();
+    const computerResult  = document.createElement('div');
+    computerResult.textContent = "Computer Chooses " + computerChoice;
+    resultDiv.appendChild(computerResult);
+
     const result = playRound(humanChoice, computerChoice);
-    console.log(result);
-    console.log("Score: you " + humanScore + " computer " + computerScore);
+    const resultText  = document.createElement('div');
+    resultText.textContent = result;
+    resultDiv.appendChild(resultText);
+
+    const score = document.createElement('div');
+    score.textContent = "Score: you " + humanScore + " computer " + computerScore;
+    resultDiv.appendChild(score);
+
+    if (humanScore === 5 || computerScore === 5) declareWinner(); 
+
+    results.appendChild(resultDiv)
 }
+
+function declareWinner() {
+    const winner = document.createElement('div');
+
+    if (humanScore === 5) {
+        winner.textContent = "Congratulations! You have won! " + humanScore + " to " + computerScore;
+    } else {
+        winner.textContent = "Sorry, you have lost. " + humanScore + " to " + computerScore;
+    }
+
+    resultDiv.appendChild(winner);
+    resetGame();
+}
+
+function resetGame() {
+    humanScore = 0;
+    computerScore = 0;
+
+}
+
+const body = document.querySelector('body');
+
+const resultDiv = document.createElement('div')
+const results = document.getElementById("results")
+
+let buttons = document.querySelector('#buttons')
+
+buttons.addEventListener('click', (event) => {
+    let target = event.target;
+
+    determineResults(target);
+});
